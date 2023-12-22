@@ -118,11 +118,11 @@ const changeMarketPrices = async () => {
                 })
             }
         })
-        console.log(matchedNewPrice)
         await updatePrices({offers: offers})
+        console.log(new Date(), 'изменение прошло успешно')
     } catch {
         console.log('Не удалось поменять цены, произошла ошибка')
     }
 }
 
-changeMarketPrices()
+setInterval(changeMarketPrices, 1800000)
