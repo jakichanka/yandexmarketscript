@@ -30,7 +30,7 @@ const itemsMap = {
     '15 Pro Max 256 Black': 'iphone15promaxblack256'
 }
 
-const overPercent = 3
+const overPercent = 3.5
 const categoryFee = 6
 const getMoneyFormMarketFee = 2.4
 const logistics = 440
@@ -119,10 +119,12 @@ const changeMarketPrices = async () => {
             }
         })
         await updatePrices({offers: offers})
-        console.log(new Date(), 'изменение прошло успешно')
+        console.log(new Date().toDateString(), 'изменение прошло успешно')
     } catch {
         console.log('Не удалось поменять цены, произошла ошибка')
     }
 }
+
+changeMarketPrices()
 
 setInterval(changeMarketPrices, 1800000)
