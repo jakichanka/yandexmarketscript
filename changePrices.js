@@ -30,7 +30,7 @@ const itemsMap = {
     '15 Pro Max 256 Black': 'iphone15promaxblack256'
 }
 
-const overPercent = 5
+const overPercent = 6
 const categoryFee = 6
 const getMoneyFormMarketFee = 2.4
 const logistics = 440
