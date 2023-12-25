@@ -1,4 +1,15 @@
 const jsdom = require('jsdom')
+const fs = require('fs');
+
+const writeTimeToFile = (time) => {
+    fs.appendFile('log.txt', `${time}\n`, (err) => {
+        if (err) {
+            console.error('Ошибка при записи в файл:', err);
+        } else {
+            console.log('Время записано в файл');
+        }
+    });
+};
 
 const token = 'y0_AgAAAAAoa-JjAArjlQAAAADzHFujshZ6EM50R9an1lpnrPbp0f2hCkI'
 
@@ -120,7 +131,8 @@ const changeMarketPrices = async () => {
             }
         })
         await updatePrices({offers: offers})
-        console.log(new Date().toDateString(), 'изменение прошло успешно')
+        const currentTime = new Date().toLocaleString();
+        writeTimeToFile(currentTime);
     } catch {
         console.log('Не удалось поменять цены, произошла ошибка')
     }
