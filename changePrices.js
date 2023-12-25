@@ -14,6 +14,7 @@ const itemsMap = {
     '14 128 Purple': 'iphone14purple128',
     '14 128 Starlight': 'iphone14starlight128',
     '14 128 Midnight': 'iphone14midnight',
+    '14 128 Black': 'iphone14midnight',
     '14 128 Blue': 'iphone14blue128nanoesim',
     '13 128 Midnight': 'iphone13midnight128',
     '13 128 Green': 'iphone13green128',
@@ -30,7 +31,7 @@ const itemsMap = {
     '15 Pro Max 256 Black': 'iphone15promaxblack256'
 }
 
-const overPercent = 7
+const overPercent = 5
 const categoryFee = 6
 const getMoneyFormMarketFee = 2.4
 const logistics = 440
