@@ -1,5 +1,6 @@
 const jsdom = require('jsdom')
 const fs = require('fs');
+const stockId = 1234356
 
 const writeTimeToFile = (time) => {
     fs.appendFile('log.txt', `${time}\n`, (err) => {
@@ -42,7 +43,7 @@ const itemsMap = {
     '15 Pro Max 256 Black': 'iphone15promaxblack256'
 }
 
-const overPercent = 5
+const overPercent = 4.5
 const categoryFee = 6
 const getMoneyFormMarketFee = 2.4
 const logistics = 440
@@ -62,6 +63,22 @@ const updatePrices = async (prices) => {
             }),
             body: JSON.stringify(prices)
         })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const updateLeftovers = async (leftovers) => {
+    try {
+        const res = await fetch('https://api.partner.market.yandex.ru/campaigns/78538934/offers/stocks', {
+            method: 'put',
+            headers: new Headers({
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }),
+            body: JSON.stringify(leftovers)
+        })
+        console.log(res)
     } catch (err) {
         console.log(err)
     }
@@ -115,22 +132,36 @@ const matchItems = (message) => {
 
 const changeMarketPrices = async () => {
     try {
+        const date = new Date()
         const res = await Promise.all([getMessage(messages[0]), getMessage(messages[1]), getMessage(messages[2])])
         const matched = res.map(modelPricesMessage => matchItems(modelPricesMessage)).flat()
         const matchedNewPrice = matched.map(item => [item[0], getNewPrice(item[1])])
 
         const offers = []
+        const leftovers = []
+        const positiveLeftovers = []
 
         matchedNewPrice.forEach(newPriceElement => {
             const [name, price] = newPriceElement
             if (itemsMap[name]) {
+                leftovers.push({sku: itemsMap[name], warehouseId: stockId, items: [{count: 3, type: "FIT", updatedAt: date.toISOString()}]})
+                positiveLeftovers.push(itemsMap[name])
                 offers.push({
                     offerId: itemsMap[name],
                     price: {value: price, currencyId: 'RUR', discountBase: Math.ceil(price * 1.15)}
                 })
             }
         })
+
+        const negativeLeftovers = Object.values(itemsMap).filter(el => !positiveLeftovers.includes(el))
+
+        negativeLeftovers.forEach(negativeSku => {
+            leftovers.push({sku: negativeSku, warehouseId: stockId, items: [{count: 0, type: "FIT", updatedAt: date.toISOString()}]})
+        })
+
+        await updateLeftovers({skus: leftovers})
         await updatePrices({offers: offers})
+
         const currentTime = new Date().toLocaleString();
         writeTimeToFile(currentTime);
     } catch {
