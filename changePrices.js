@@ -78,7 +78,6 @@ const updateLeftovers = async (leftovers) => {
             }),
             body: JSON.stringify(leftovers)
         })
-        console.log(res)
     } catch (err) {
         console.log(err)
     }
