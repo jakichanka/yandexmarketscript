@@ -44,7 +44,7 @@ const itemsMap = {
 }
 
 const overPercent = 7
-const categoryFee = 6
+const categoryFee = 9
 const getMoneyFormMarketFee = 2.4
 const logistics = 440
 const individualEntrepreneurTax = 6
